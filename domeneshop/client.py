@@ -166,6 +166,22 @@ class Client:
         """
         self._request("DELETE", "/domains/{0}/dns/{1}".format(domain_id, record_id))
 
+    # Dynamic DNS (DDNS)
+
+    def update_dyndns(self, domain_name: str, ip_address=None) -> None:
+        """
+        Update the DNS record for a given domain, or raises an error.
+
+        :param domain_name: The fully qualified domain(s) (FQDN) to be updated
+        :param ip_address: The new ip address to set. If not provided the IP of the client making the API request will be used.
+        """
+        if ip_address is not None:
+            ip_param = "&myip={0}".format(ip_address)
+        else:
+            ip_param = ""
+        self._requst("GET", "/dyndns/update?hostname={0}{1}".format(domain_name, ip_param)
+
+
     # Forwards
 
     def get_forwards(self, domain_id: int) -> List[dict]:
