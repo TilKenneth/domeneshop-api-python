@@ -66,6 +66,34 @@ class Client:
             ca_certs=certifi.where(),
         )
 
+
+    # Invoices
+
+    def get_invoices(self, status: str = "unpaid") -> List[dict]:
+        """
+        Retrieve a list of invoices, or raises an error.
+
+        :param status: The invoice status to filter by. Default: unpaid
+        Valid statuses: unpaid, paid, settled
+
+        :return: A list of invoice dictionaries
+        """
+        resp = self._request("GET", "/invoices?status={0}".format(status))
+        invoices = json.loads(resp.data.decode("utf-8"))
+        return invoices
+
+    def get_invoice(self, invoice_id: int) -> dict:
+        """
+        Retrieve a specific invoice, or raises an error.
+
+        :param invoice_id: The invoice ID to retrieve
+
+        :return: An invoice dictionary
+        """
+        resp = self._request("GET", "/invoices/{0}".format(invoice_id))
+        invoice = json.loads(resp.data.decode("utf-8"))
+        return invoice
+    
     # Domains
 
     def get_domains(self) -> List[dict]:
